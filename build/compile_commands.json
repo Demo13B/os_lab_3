@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/timursalihov/OperatingSystems/LW3/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o CMakeFiles/main.dir/main.cpp.o -c /Users/timursalihov/OperatingSystems/LW3/main.cpp",
+  "file": "/Users/timursalihov/OperatingSystems/LW3/main.cpp",
+  "output": "CMakeFiles/main.dir/main.cpp.o"
+}
+]
