@@ -1,23 +1,35 @@
 #include <fcntl.h>
+#include <stdio.h>
+#include <sys/mman.h>
 #include <unistd.h>
-#include <string>
+#include <iostream>
 
 auto main() -> int {
-    int outputd;
-    outputd = open("output.txt", O_RDWR | O_CREAT | O_TRUNC, 0666);
-    std::string received;
-    int sum = 0;
+    FILE* f = fopen("output.txt", "w");
+    fprintf(f, "The sums are: ");
 
-    while (read(STDIN_FILENO, &received, sizeof(received)) != 0) {
-        sum += std::stoi(received);
+    int memoryd;
+    memoryd = open("memory.txt", O_RDWR, 0666);
+    char* buffer = (char*)mmap(NULL, 1024, PROT_READ | PROT_WRITE, MAP_SHARED, memoryd, 0);
+
+    int num = 0, sum = 0;
+    size_t i = 0;
+    while (buffer[i] != -1) {
+        if (buffer[i] != ' ' && buffer[i] != '\n') {
+            num *= 10;
+            num += buffer[i] - '0';
+        } else if (buffer[i] == ' ') {
+            sum += num;
+            num = 0;
+        } else if (buffer[i] == '\n') {
+            if (num != 0)
+                sum += num;
+            fprintf(f, "%d ", sum);
+            sum = 0;
+            num = 0;
+        }
+        ++i;
     }
 
-    std::string sum_str = std::to_string(sum);
-
-    char output[100];
-    sprintf(output, "The sum is: %d", sum);
-
-    if (write(outputd, &output, 12 + sum_str.length()) == -1) {
-        return 1;
-    }
+    return 0;
 }

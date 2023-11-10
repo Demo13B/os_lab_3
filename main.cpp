@@ -3,14 +3,13 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <iostream>
-#include <string>
 
 auto main() -> int {
     int memoryd;
     memoryd = open("memory.txt", O_RDWR | O_CREAT | O_TRUNC, 0666);
 
     ftruncate(memoryd, 1024);
-    char* buffer = (char*)mmap(NULL, 4096, PROT_WRITE, MAP_SHARED, memoryd, 0);
+    char* buffer = (char*)mmap(NULL, 1024, PROT_READ | PROT_WRITE, MAP_SHARED, memoryd, 0);
 
     // Forking the process
     int id = fork();
@@ -32,7 +31,9 @@ auto main() -> int {
             c = getchar();
         }
 
-        std::cout << "Test";
+        buffer[i] = c;
+
+        std::cout << "Stopped reading";
         int status;
         waitpid(0, &status, 0);  // waiting for child process to finish
 
