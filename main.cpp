@@ -46,9 +46,9 @@ auto main() -> int {
         int status;
         waitpid(0, &status, 0);  // waiting for child process to finish
 
-        if (status != 0) {
+        if (status != 0)
             perror("Child process exited with an error");
-        }
-        return 0;
+
+        return status;
     }
 }
